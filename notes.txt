@@ -1,0 +1,57 @@
+->  Imagine you have a web server running in a Docker container.
+    If the server crashes or your computer reboots, the restart:
+    unless-stopped policy will ensure the server container comes
+    back up automatically, keeping your web service running.
+    But if you manually stop the container for maintenance, Docker
+    won't restart it until you decide to start it again.
+
+mail-dev:
+    Port 1080: Used to view the emails. This port serves the MailDev web interface, where you can open your browser and see the emails that have been "sent" to the MailDev server.
+
+    Port 1025: Used to send the emails. Your application connects to this port to send emails via MailDev's SMTP server, simulating how emails would be sent in a real environment.
+
+#The reason MailDev uses two separate ports (1025 and 1080) is because they serve different purposes and operate on different protocols:
+
+ 1. Port 1025 (SMTP) – Sending Emails:
+ SMTP (Simple Mail Transfer Protocol) is the protocol used for sending emails.
+ Your application connects to this port to send emails.
+ This port is dedicated to handling SMTP traffic and does not serve a web interface.
+ 2. Port 1080 (HTTP) – Viewing Emails:
+ HTTP (Hypertext Transfer Protocol) is the protocol used for serving web pages.
+ Port 1080 is dedicated to running MailDev’s web interface, where you can view emails in a browser.
+ This port handles HTTP traffic, not SMTP.
+ Why can’t they work on the same port?
+ Different protocols: SMTP (used for sending emails) and HTTP (used for viewing the emails in a web interface) are completely different protocols. A single port can only handle one type of protocol at a time.
+ If you try to use the same port for both, the server won’t know whether to treat incoming traffic as SMTP or HTTP requests, which would lead to errors and conflicts.
+
+ #Yes, that's correct! MailDev essentially runs two separate servers internally:
+
+  SMTP Server (on port 1025):
+  This server listens for SMTP requests and handles email-sending functionality. It mimics how a real email server works. Your application sends emails to this SMTP server as if it were sending them to a real mail server.
+  Web Server (on port 1080):
+  This server handles HTTP requests and provides the MailDev web interface. Through this interface, you can view the emails that were "sent" to the SMTP server. It acts like a simple web application, showing you the email inbox.
+
+-> @EntityListeners(AuditingEntityListener.class)
+
+@EntityListeners(AuditingEntityListener.class):
+
+This annotation in Spring Data JPA tells your application to use AuditingEntityListener
+to automatically track and update audit information in your entity. It helps manage and record details like creation and modification times for each entity.
+
+-> @EnableMethodSecurity(securedEnabled = true)
+@EnableMethodSecurity:
+
+This annotation is used to turn on Spring Security’s support for method-level security. It allows you to secure individual methods in your Spring beans, ensuring that only authorized users can invoke certain methods.
+securedEnabled = true:
+
+This specifically enables the use of the @Secured annotation. The @Secured annotation allows you to specify security roles that are required to access specific methods.
+When set to true, you can secure methods by specifying which roles are allowed to execute them.
+
+-> http.cors(withDefaults())
+If you are using Spring Security and you do not mention http.cors(withDefaults()), then even if you use the @CrossOrigin annotation to allow specific frontend origins, the frontend might not be able to connect to the backend. This is because Spring Security, by default, will block cross-origin requests unless CORS is explicitly enabled in its configuration.
+
+-> @Transactional(readOnly = true)
+Yes, using @Transactional can help load related data in a @OneToMany relationship. It ensures that the associated data (from the other table) is loaded correctly during the transaction, especially if lazy loading is used. Without a transaction, lazy-loaded collections might not get fetched when accessed outside the original method.
+
+Read-Only Transactions: You can optimize performance by specifying that a transaction is read-only. This informs the transaction manager that the method will not modify data, allowing optimizations like caching and reducing lock contention.
+Read-Only Annotation: You can use @Transactional(readOnly = true) to hint that the transaction should be optimized for read-only access.
