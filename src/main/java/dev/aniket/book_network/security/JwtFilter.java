@@ -63,3 +63,29 @@ public class JwtFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 }
+
+
+/*class MethodReferenceDemo {
+
+    // A method that will be referenced
+    public static String toUpperCase(String str) {
+        return str.toUpperCase();
+    }
+
+    public static void main(String[] args) {
+        // Creating a Function that points to the toUpperCase method
+        Function<String, String> func = MethodReferenceDemo::toUpperCase;
+
+        // Calling apply() will run the toUpperCase method
+        String result = func.apply("hello");
+
+        // Output: HELLO
+        System.out.println(result);
+    }
+}*/
+
+/*In the Function<String, String> interface, the two String types represent the input and the output of the function. Here’s what each represents:
+
+First String: The input type. This is the type of the argument that the Function will receive when the apply() method is called.
+
+Second String: The output type. This is the type of the value that the Function will return when the apply() method finishes execution.*/
