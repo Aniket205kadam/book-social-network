@@ -1,19 +1,17 @@
 services:
-  postgres:
-    container_name: postgres-sql-bsn
-    image: postgres
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 2004
-      PGDATA: /var/lib/postgres/data
-      POSTGRES_DB: book_social_network
-    volumes:
-      - postgres:/data/postgres
-    ports:
-      - 5432:5432
-    networks:
-      - spring-demo
-    restart: unless-stopped
+#  postgres:
+#    container_name: postgres-sql-bsn
+#    image: postgres:latest
+#    environment:
+#      POSTGRES_USER: postgres
+#      POSTGRES_PASSWORD: 2004
+#      POSTGRES_DB: book_social_network
+#    ports:
+#      - 5433:5432
+#    networks:
+#      - spring-demo
+#    volumes:
+#      - postgres-student-data:/var/lib/postgresql/data
 
   mail-dev:
     container_name: mail-dev-bsn
@@ -29,5 +27,4 @@ networks:
     driver: bridge
 
 volumes:
-  postgres:
-    driver: local
+  postgres-student-data:

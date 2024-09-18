@@ -55,3 +55,7 @@ Yes, using @Transactional can help load related data in a @OneToMany relationshi
 
 Read-Only Transactions: You can optimize performance by specifying that a transaction is read-only. This informs the transaction manager that the method will not modify data, allowing optimizations like caching and reducing lock contention.
 Read-Only Annotation: You can use @Transactional(readOnly = true) to hint that the transaction should be optimized for read-only access.
+
+-> @JsonInclude(JsonInclude.Include.NON_EMPTY)
+ If the fields are empty (like an empty string, empty collection) or null, they won't be included in the JSON object when you use @JsonInclude(JsonInclude.Include.NON_EMPTY).
+

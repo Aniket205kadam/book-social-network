@@ -4,15 +4,23 @@ spring:
     username: postgres
     password: 2004
     driver-class-name: org.postgresql.Driver
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
+#    show-sql: true
+##    properties:
+##      hibernate:
+##        format_sql: true
+#    database: postgresql
+#    database-platform: org.hibernate.dialect.PostgreSQLDialect
   jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
     properties:
       hibernate:
-        format_sql: true
-    database: postgresql
-    database-platform: org.hibernate.dialect.PostgreSLDialect
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    defer-datasource-initialization: true
 
   mail:
     host: localhost
@@ -33,8 +41,11 @@ spring:
 application:
   security:
     jwt:
-      secret-key: 6E9F145D81EA3C6995AF37C6AC22E
+      secret-key: MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQCXQr4Xq6hLQrX3Qr4Xq6hLQrX3Qr4Xq6hLQrX3Qr4Xq6hLQrX3Qr4Xq6hLQrX3Qr4Xq6hLQrX3
       expiration: 86400000
   mailing:
     frontend:
       activation-url: http://localhost:4200/activate-account
+
+server:
+  port: 8088

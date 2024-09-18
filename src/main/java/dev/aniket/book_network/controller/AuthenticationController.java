@@ -1,5 +1,7 @@
 package dev.aniket.book_network.controller;
 
+import dev.aniket.book_network.request.AuthenticationRequest;
+import dev.aniket.book_network.request.AuthenticationResponse;
 import dev.aniket.book_network.request.RegistrationRequest;
 import dev.aniket.book_network.service.AuthenticationService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,5 +28,20 @@ public class AuthenticationController {
         return ResponseEntity
                 .accepted()
                 .build();
+    }
+
+    @PostMapping("/authenticate")
+    public ResponseEntity<AuthenticationResponse> authenticate(
+            @RequestBody @Valid AuthenticationRequest authenticationRequest
+    ) {
+        return ResponseEntity.ok(authenticationService.authenticate(authenticationRequest));
+    }
+
+    @GetMapping("/activate-account")
+    public void confirm(
+            @RequestParam String token
+    ) throws MessagingException {
+        System.out.println("activate-account");
+        authenticationService.activateAccount(token);
     }
 }
