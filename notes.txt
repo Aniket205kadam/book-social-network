@@ -66,4 +66,15 @@ Read-Only Annotation: You can use @Transactional(readOnly = true) to hint that t
     -> write createBy and LastModifiedBy to spring need Bean of the AuditorAware<T>, so we implement the
     interface, and this is generic T for the user table primary key in the project user primary ke type Integer
 
+-> authentication instanceof AnonymousAuthenticationToken
+    Yes, you're right! Since AnonymousAuthenticationToken is a child of Authentication, if you don't explicitly check for it (using instanceof AnonymousAuthenticationToken), users who are anonymous (i.e., not authenticated) could theoretically attempt actions like modifying data. In a well-designed Spring Security application, you need to properly check the authentication type and assign roles to prevent unauthorized access.
+
+    Example scenario: Imagine a website where certain pages can be viewed without logging in (like viewing a product on an e-commerce site). If the user is not logged in, their session would be represented by AnonymousAuthenticationToken
+
+-> Optional.ofNullable(user.getId());
+   user.getId(): This retrieves the id of the user. However, it might return null if the user object doesn't have an ID set yet, such as when the user is not persisted in the database.
+
+ -> @Tag(name = "Book")
+    The @Tag annotation in Spring Framework is used to specify metadata for the API documentation when you're using Swagger (also known as OpenAPI) to document your RESTful web services. The @Tag annotation allows you to group related operations under a specific name or description, making it easier to organize and understand the API endpoints.
+
 

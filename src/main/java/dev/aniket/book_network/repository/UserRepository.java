@@ -1,4 +1,4 @@
-package dev.aniket.book_network.Repository;
+package dev.aniket.book_network.repository;
 
 import dev.aniket.book_network.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;

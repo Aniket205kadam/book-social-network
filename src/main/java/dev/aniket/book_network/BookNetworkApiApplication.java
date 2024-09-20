@@ -1,6 +1,6 @@
 package dev.aniket.book_network;
 
-import dev.aniket.book_network.Repository.RoleRepository;
+import dev.aniket.book_network.repository.RoleRepository;
 import dev.aniket.book_network.model.Role;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;

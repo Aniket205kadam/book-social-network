@@ -102,3 +102,8 @@ public class User implements UserDetails, Principal {
         return firstname + " " + lastname;
     }
 }
+
+// The @Transient annotation in Java is used in the context of JPA (Java Persistence API)
+// to indicate that a particular field in an entity should not be persisted in the database.
+// It tells JPA that the field is temporary, and JPA should ignore it when performing database
+// operations like inserts, updates, or queries.

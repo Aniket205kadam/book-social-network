@@ -1,18 +1,16 @@
 package dev.aniket.book_network.service;
 
-import dev.aniket.book_network.Repository.RoleRepository;
-import dev.aniket.book_network.Repository.TokenRepository;
-import dev.aniket.book_network.Repository.UserRepository;
+import dev.aniket.book_network.repository.RoleRepository;
+import dev.aniket.book_network.repository.TokenRepository;
+import dev.aniket.book_network.repository.UserRepository;
 import dev.aniket.book_network.model.Token;
 import dev.aniket.book_network.model.User;
 import dev.aniket.book_network.request.AuthenticationRequest;
 import dev.aniket.book_network.request.AuthenticationResponse;
 import dev.aniket.book_network.request.EmailTemplateName;
 import dev.aniket.book_network.request.RegistrationRequest;
-import io.jsonwebtoken.Claims;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.sql.Update;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,7 +18,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
 import java.time.LocalDateTime;

@@ -1,6 +1,6 @@
 package dev.aniket.book_network.security;
 
-import dev.aniket.book_network.Repository.UserRepository;
+import dev.aniket.book_network.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

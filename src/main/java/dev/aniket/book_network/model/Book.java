@@ -36,4 +36,18 @@ public class Book extends BaseEntity {
 
     @OneToMany(mappedBy = "book", fetch = FetchType.EAGER)
     private List<BookTransactionHistory> histories;
+
+    @Transient
+    public double getRate() {
+        if (feedBacks == null || feedBacks.isEmpty()) {
+            return 0.0;
+        }
+        double rate = feedBacks
+                .stream()
+                .mapToDouble(FeedBack::getNote)
+                .average()
+                .orElse(0.0);
+        return Math.round(rate * 10.0) / 10.0; // rounded the value
+        // run this System.out.println(Math.round(5.23 * 10.0));System.out.println(Math.round(5.23 * 10.0) / 10.0);
+    }
 }
