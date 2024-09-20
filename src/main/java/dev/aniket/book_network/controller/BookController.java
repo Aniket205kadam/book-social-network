@@ -1,5 +1,6 @@
 package dev.aniket.book_network.controller;
 
+import dev.aniket.book_network.common.PageResponse;
 import dev.aniket.book_network.request.BookRequest;
 import dev.aniket.book_network.request.BookResponse;
 import dev.aniket.book_network.service.BookService;
@@ -9,8 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/books")
@@ -36,4 +35,13 @@ public class BookController {
                 .ok(bookService.findById(bookId));
     }
 
+    @GetMapping
+    public ResponseEntity<PageResponse<BookResponse>> findAllBooks(
+        @RequestParam(name = "page", defaultValue = "0", required = false) int page,
+        @RequestParam(name = "size", defaultValue = "10", required = false) int size,
+        Authentication connectedUser
+    ) {
+        return ResponseEntity
+                .ok(bookService.findAllBooks(page, size, connectedUser));
+    }
 }
