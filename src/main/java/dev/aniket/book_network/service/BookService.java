@@ -87,7 +87,7 @@ public class BookService {
 
     @Transactional(readOnly = true)
     public PageResponse<BorrowedBookResponse> findAllBorrowedBooks(int page, int size, Authentication connectedUser) {
-        User userPrinciple = ((User) connectedUser);
+        User userPrinciple = ((User) connectedUser.getPrincipal());
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdDate").descending());
         Page<BookTransactionHistory> allBorrowedBooks = bookTransactionHistoryRepository.findAllBorrowedBooks(pageable, userPrinciple.getId());
         List<BorrowedBookResponse> bookResponse = allBorrowedBooks
@@ -107,7 +107,7 @@ public class BookService {
 
     @Transactional(readOnly = true)
     public PageResponse<BorrowedBookResponse> findAllReturnedBooks(int page, int size, Authentication connectedUser) {
-        User userPrinciple = ((User) connectedUser);
+        User userPrinciple = ((User) connectedUser.getPrincipal());
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdBy").descending());
         Page<BookTransactionHistory> allBorrowedBooks = bookTransactionHistoryRepository.findAllReturnedBooks(pageable, userPrinciple.getId());
         List<BorrowedBookResponse> bookResponse = allBorrowedBooks
@@ -129,7 +129,7 @@ public class BookService {
     public Integer updateSharableStatus(Integer bookId, Authentication connectedUser) {
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new EntityNotFoundException("No book found with the ID: " + bookId));
-        User userPrinciple = ((User) connectedUser);
+        User userPrinciple = ((User) connectedUser.getPrincipal());
         // only owner of the book can update the sharable status
         if (!book.getOwner().getId().equals(userPrinciple.getId())) {
             throw new OperationNotPermittedException("You cannot update other books shareable status");
@@ -143,7 +143,7 @@ public class BookService {
     public Integer updateArchivedStatus(Integer bookId, Authentication connectedUser) {
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new EntityNotFoundException("No book found with the ID: " + bookId));
-        User userPrinciple = ((User) connectedUser);
+        User userPrinciple = ((User) connectedUser.getPrincipal());
         // only owner of the book can update the archived status
         if (!book.getOwner().getId().equals(userPrinciple.getId())) {
             throw new OperationNotPermittedException("You cannot update other books archived status");
@@ -151,5 +151,31 @@ public class BookService {
         // update archived status
         book.setArchived(!book.isArchived());
         return bookRepository.save(book).getId();
+    }
+
+    @Transactional(readOnly = false)
+    public Integer borrowBook(Integer bookId, Authentication connectedUser) {
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new EntityNotFoundException("No book found with the ID: " + bookId));
+        // if the book shareable or not archived that case you can borrow the book
+        if (!book.isShareable() || book.isArchived()) {
+            throw new OperationNotPermittedException("The requested book cannot be borrowed since it is archived or not sharable");
+        }
+        User userPrinciple = ((User) connectedUser.getPrincipal());
+        // owner of the book cannot borrow the book
+        if (book.getOwner().getId().equals(userPrinciple.getId())) {
+            throw new OperationNotPermittedException("You cannot borrow your own book");
+        }
+        final boolean isAlreadyBorrowed = bookTransactionHistoryRepository.isAlreadyBorrowedByUser(bookId, userPrinciple.getId());
+        if (isAlreadyBorrowed) {
+            throw new OperationNotPermittedException("The requested book is already borrowed");
+        }
+        BookTransactionHistory bookTransactionHistory = BookTransactionHistory.builder()
+                .user(userPrinciple)
+                .book(book)
+                .returned(false)
+                .returnApproved(false)
+                .build();
+        return bookTransactionHistoryRepository.save(bookTransactionHistory).getId();
     }
 }
