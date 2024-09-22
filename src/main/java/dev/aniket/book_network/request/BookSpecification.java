@@ -1,5 +1,6 @@
 package dev.aniket.book_network.request;
 
+import dev.aniket.book_network.history.BookTransactionHistory;
 import dev.aniket.book_network.model.Book;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -16,6 +17,17 @@ public class BookSpecification {
                         criteriaBuilder.equal(root.get("archived"), false),
                         criteriaBuilder.equal(root.get("sharable"), true),
                         criteriaBuilder.notEqual(root.get("owner").get("id"), userId)
+                )
+        );
+    }
+
+    public static Specification<BookTransactionHistory> getBorrowedBookByUser(Integer userId) {
+        return ((root, query, criteriaBuilder) -> criteriaBuilder
+                .equal(
+                        root
+                            .get("user")
+                            .get("id"),
+                        userId
                 )
         );
     }

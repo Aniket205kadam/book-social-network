@@ -1,8 +1,10 @@
 package dev.aniket.book_network.service;
 
+import dev.aniket.book_network.history.BookTransactionHistory;
 import dev.aniket.book_network.model.Book;
 import dev.aniket.book_network.request.BookRequest;
 import dev.aniket.book_network.request.BookResponse;
+import dev.aniket.book_network.request.BorrowedBookResponse;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -34,6 +36,19 @@ public class BookMapper {
                 .rate(book.getRate())
                 .archived(book.isArchived())
                 .sharable(book.isShareable())
+                .build();
+    }
+
+    public BorrowedBookResponse toBorrowedBookResponse(BookTransactionHistory history) {
+        return BorrowedBookResponse
+                .builder()
+                .id(history.getBook().getId())
+                .title(history.getBook().getTitle())
+                .authorName(history.getBook().getAuthorName())
+                .isbn(history.getBook().getIsbn())
+                .rate(history.getBook().getRate())
+                .returned(history.isReturned())
+                .returnedApproved(history.isReturnApproved())
                 .build();
     }
 }
